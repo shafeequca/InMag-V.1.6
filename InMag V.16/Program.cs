@@ -17,6 +17,7 @@ namespace InMag_V._16
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new frmMenu());
+            //test
         }
     }
 }
