@@ -24,10 +24,10 @@ namespace InMag_V._16
         {
             try
             {
-                string query = "select * from tblStaff  where StaffName like '%" + txtSearch.Text.Trim() + "%'  order by StaffName";
+                string query = "select * from tblStaff  where StaffName like '" + txtSearch.Text.Trim() + "%'  order by StaffName";
                 dataGridView1.DataSource = Connections.Instance.ShowDataInGridView(query);
                 dataGridView1.Columns[0].Visible = false;
-                //dataGridView1.Columns[2].Visible = false;
+                dataGridView1.Columns[2].Visible = false;
                 //dataGridView1.Columns[3].Visible = false;
             }
             catch { }

@@ -65,10 +65,11 @@ namespace InMag_V._16
         {
             try
             {
-                string query = "select * from tblItem where Item_Name like '%" + txtSearch.Text.Trim() + "%'  order by Item_Name";
+                string query = "select * from tblItem where Item_Name like '" + txtSearch.Text.Trim() + "%'  order by Item_Name";
                 dataGridView1.DataSource = Connections.Instance.ShowDataInGridView(query);
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[1].Visible = false;
+                dataGridView1.Columns[2].Width = 100;
                 dataGridView1.Columns[3].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
                 dataGridView1.Columns[7].Visible = false;

@@ -274,15 +274,17 @@ namespace InMag_V._16
         {
             try
             {
+                Type t = typeof(System.Windows.Forms.SystemInformation);
+                
                 string query = "select ROW_NUMBER() OVER(ORDER BY id) AS Row,itemcode,itemid,itemname,qty,rate,total from tblTemp;";
                 ItemGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
-                ItemGrid.Columns[0].Width = 50;
-                ItemGrid.Columns[1].Width = 112;
+                ItemGrid.Columns[0].Width = 35;
+                ItemGrid.Columns[1].Width = txtItemcode.Width;//86;
                 ItemGrid.Columns[2].Visible = false;
-                ItemGrid.Columns[3].Width = 272;
-                ItemGrid.Columns[4].Width = 128;
-                ItemGrid.Columns[5].Width = 124;
-                ItemGrid.Columns[6].Width = 145;
+                ItemGrid.Columns[3].Width = txtItems.Width - 1;//203;
+                ItemGrid.Columns[4].Width = txtQuantity.Width;//128;
+                ItemGrid.Columns[5].Width = txtRate.Width-1;//124;
+                ItemGrid.Columns[6].Width = txtTotal.Width -5-  (ItemGrid.Controls.OfType<VScrollBar>().First().Visible? SystemInformation.VerticalScrollBarWidth:0); //145;
                 if (ItemGrid.Rows.Count > 0)
                 {
                     ItemGrid.FirstDisplayedScrollingRowIndex = ItemGrid.RowCount - 1;
@@ -748,7 +750,7 @@ namespace InMag_V._16
             if (txtItems.Text.Trim() != "")
             {
                 itemView.Visible = false;
-                string query = "select itemId,Item_Code,Item_Name,Rate,WRate from tblitem where Item_Name like '%" + txtItems.Text + "%';";
+                string query = "select itemId,Item_Code,Item_Name,Rate,WRate from tblitem where Item_Name like '" + txtItems.Text + "%';";
                 ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
                 if (ItemDisplayGrid.Rows.Count == 1 && txtItems.Text != ItemDisplayGrid.Rows[0].Cells[2].Value.ToString())
                 {

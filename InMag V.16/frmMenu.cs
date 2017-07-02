@@ -11,6 +11,7 @@ namespace InMag_V._16
 {
     public partial class frmMenu : Form
     {
+        public string user;
         public frmMenu()
         {
             InitializeComponent();

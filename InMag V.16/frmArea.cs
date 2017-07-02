@@ -26,7 +26,7 @@ namespace InMag_V._16
         {
             try
             {
-                string query = "select * from tblArea where Area like '%" + txtSearch.Text.Trim() + "%'";
+                string query = "select * from tblArea where Area like '" + txtSearch.Text.Trim() + "%'";
                 dataGridView1.DataSource = Connections.Instance.ShowDataInGridView(query);
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[3].Visible = false;

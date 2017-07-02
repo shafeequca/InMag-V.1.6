@@ -51,41 +51,41 @@
             // 
             // cboStaff
             // 
+            this.cboStaff.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboStaff.FormattingEnabled = true;
-            this.cboStaff.Location = new System.Drawing.Point(89, 47);
-            this.cboStaff.Margin = new System.Windows.Forms.Padding(4);
+            this.cboStaff.Location = new System.Drawing.Point(77, 36);
             this.cboStaff.Name = "cboStaff";
-            this.cboStaff.Size = new System.Drawing.Size(335, 24);
+            this.cboStaff.Size = new System.Drawing.Size(209, 28);
             this.cboStaff.TabIndex = 0;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.White;
-            this.label5.Location = new System.Drawing.Point(35, 48);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label5.Location = new System.Drawing.Point(27, 38);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(38, 18);
+            this.label5.Size = new System.Drawing.Size(44, 20);
             this.label5.TabIndex = 26;
             this.label5.Text = "Staff";
             // 
             // DatePicker
             // 
+            this.DatePicker.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.DatePicker.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.DatePicker.Location = new System.Drawing.Point(487, 48);
+            this.DatePicker.Location = new System.Drawing.Point(353, 38);
+            this.DatePicker.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.DatePicker.Name = "DatePicker";
-            this.DatePicker.Size = new System.Drawing.Size(120, 22);
+            this.DatePicker.Size = new System.Drawing.Size(102, 26);
             this.DatePicker.TabIndex = 50;
             // 
             // lblDate
             // 
-            this.lblDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblDate.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblDate.ForeColor = System.Drawing.Color.White;
-            this.lblDate.Location = new System.Drawing.Point(432, 48);
-            this.lblDate.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblDate.Location = new System.Drawing.Point(299, 38);
             this.lblDate.Name = "lblDate";
-            this.lblDate.Size = new System.Drawing.Size(43, 24);
+            this.lblDate.Size = new System.Drawing.Size(48, 20);
             this.lblDate.TabIndex = 49;
             this.lblDate.Text = "Date";
             // 
@@ -93,17 +93,21 @@
             // 
             this.cboItems.AutoCompleteMode = System.Windows.Forms.AutoCompleteMode.SuggestAppend;
             this.cboItems.AutoCompleteSource = System.Windows.Forms.AutoCompleteSource.ListItems;
+            this.cboItems.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.cboItems.FormattingEnabled = true;
-            this.cboItems.Location = new System.Drawing.Point(89, 122);
+            this.cboItems.Location = new System.Drawing.Point(67, 99);
+            this.cboItems.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cboItems.Name = "cboItems";
-            this.cboItems.Size = new System.Drawing.Size(386, 24);
+            this.cboItems.Size = new System.Drawing.Size(290, 28);
             this.cboItems.TabIndex = 1;
             // 
             // cmdItemClear
             // 
-            this.cmdItemClear.Location = new System.Drawing.Point(41, 123);
+            this.cmdItemClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.cmdItemClear.Location = new System.Drawing.Point(31, 100);
+            this.cmdItemClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cmdItemClear.Name = "cmdItemClear";
-            this.cmdItemClear.Size = new System.Drawing.Size(45, 23);
+            this.cmdItemClear.Size = new System.Drawing.Size(34, 19);
             this.cmdItemClear.TabIndex = 95;
             this.cmdItemClear.Text = "---";
             this.cmdItemClear.UseVisualStyleBackColor = true;
@@ -119,14 +123,15 @@
             this.ItemGrid.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.ItemGrid.ColumnHeadersVisible = false;
             this.ItemGrid.ContextMenuStrip = this.contextMenuStrip1;
-            this.ItemGrid.Location = new System.Drawing.Point(38, 150);
+            this.ItemGrid.Location = new System.Drawing.Point(28, 122);
+            this.ItemGrid.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ItemGrid.MultiSelect = false;
             this.ItemGrid.Name = "ItemGrid";
             this.ItemGrid.ReadOnly = true;
             this.ItemGrid.RowHeadersVisible = false;
             this.ItemGrid.RowTemplate.Height = 24;
             this.ItemGrid.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.ItemGrid.Size = new System.Drawing.Size(569, 368);
+            this.ItemGrid.Size = new System.Drawing.Size(427, 299);
             this.ItemGrid.TabIndex = 93;
             // 
             // contextMenuStrip1
@@ -135,69 +140,71 @@
             this.Edit,
             this.Delete});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
-            this.contextMenuStrip1.Size = new System.Drawing.Size(123, 52);
+            this.contextMenuStrip1.Size = new System.Drawing.Size(124, 52);
             // 
             // Edit
             // 
+            this.Edit.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Edit.Name = "Edit";
-            this.Edit.Size = new System.Drawing.Size(122, 24);
+            this.Edit.Size = new System.Drawing.Size(123, 24);
             this.Edit.Text = "Edit";
             // 
             // Delete
             // 
+            this.Delete.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.Delete.Name = "Delete";
-            this.Delete.Size = new System.Drawing.Size(122, 24);
+            this.Delete.Size = new System.Drawing.Size(123, 24);
             this.Delete.Text = "Delete";
             // 
             // txtQuantity
             // 
-            this.txtQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.txtQuantity.Location = new System.Drawing.Point(472, 122);
+            this.txtQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.txtQuantity.Location = new System.Drawing.Point(354, 99);
+            this.txtQuantity.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.txtQuantity.Name = "txtQuantity";
-            this.txtQuantity.Size = new System.Drawing.Size(135, 24);
+            this.txtQuantity.Size = new System.Drawing.Size(102, 26);
             this.txtQuantity.TabIndex = 2;
             // 
             // lblQuantity
             // 
             this.lblQuantity.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblQuantity.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblQuantity.ForeColor = System.Drawing.Color.White;
-            this.lblQuantity.Location = new System.Drawing.Point(472, 95);
-            this.lblQuantity.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblQuantity.Location = new System.Drawing.Point(354, 77);
             this.lblQuantity.Name = "lblQuantity";
-            this.lblQuantity.Size = new System.Drawing.Size(135, 23);
+            this.lblQuantity.Size = new System.Drawing.Size(101, 19);
             this.lblQuantity.TabIndex = 86;
             this.lblQuantity.Text = "Quantity";
             // 
             // lblItemname
             // 
             this.lblItemname.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblItemname.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblItemname.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblItemname.ForeColor = System.Drawing.Color.White;
-            this.lblItemname.Location = new System.Drawing.Point(89, 95);
-            this.lblItemname.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblItemname.Location = new System.Drawing.Point(67, 77);
             this.lblItemname.Name = "lblItemname";
-            this.lblItemname.Size = new System.Drawing.Size(386, 23);
+            this.lblItemname.Size = new System.Drawing.Size(290, 19);
             this.lblItemname.TabIndex = 85;
             this.lblItemname.Text = "Item Name";
             // 
             // lblSlno
             // 
             this.lblSlno.BorderStyle = System.Windows.Forms.BorderStyle.Fixed3D;
-            this.lblSlno.Font = new System.Drawing.Font("Microsoft Sans Serif", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.lblSlno.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.lblSlno.ForeColor = System.Drawing.Color.White;
-            this.lblSlno.Location = new System.Drawing.Point(41, 95);
-            this.lblSlno.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.lblSlno.Location = new System.Drawing.Point(31, 77);
             this.lblSlno.Name = "lblSlno";
-            this.lblSlno.Size = new System.Drawing.Size(53, 23);
+            this.lblSlno.Size = new System.Drawing.Size(40, 19);
             this.lblSlno.TabIndex = 83;
             this.lblSlno.Text = "Sl.No";
             // 
             // btnSave
             // 
-            this.btnSave.Location = new System.Drawing.Point(373, 543);
+            this.btnSave.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnSave.Location = new System.Drawing.Point(280, 441);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(114, 31);
+            this.btnSave.Size = new System.Drawing.Size(86, 34);
             this.btnSave.TabIndex = 3;
             this.btnSave.Text = "&Save";
             this.btnSave.UseVisualStyleBackColor = true;
@@ -205,9 +212,11 @@
             // 
             // btnClear
             // 
-            this.btnClear.Location = new System.Drawing.Point(493, 543);
+            this.btnClear.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.btnClear.Location = new System.Drawing.Point(370, 441);
+            this.btnClear.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.btnClear.Name = "btnClear";
-            this.btnClear.Size = new System.Drawing.Size(114, 31);
+            this.btnClear.Size = new System.Drawing.Size(86, 34);
             this.btnClear.TabIndex = 5;
             this.btnClear.Text = "&Clear";
             this.btnClear.UseVisualStyleBackColor = true;
@@ -215,13 +224,12 @@
             // 
             // frmAddStock
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.MidnightBlue;
-            this.ClientSize = new System.Drawing.Size(644, 598);
+            this.ClientSize = new System.Drawing.Size(493, 486);
             this.Controls.Add(this.btnClear);
             this.Controls.Add(this.btnSave);
-            this.Controls.Add(this.cboItems);
             this.Controls.Add(this.cmdItemClear);
             this.Controls.Add(this.ItemGrid);
             this.Controls.Add(this.txtQuantity);
@@ -232,8 +240,8 @@
             this.Controls.Add(this.lblDate);
             this.Controls.Add(this.cboStaff);
             this.Controls.Add(this.label5);
+            this.Controls.Add(this.cboItems);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
-            this.Margin = new System.Windows.Forms.Padding(4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "frmAddStock";

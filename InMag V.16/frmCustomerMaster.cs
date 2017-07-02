@@ -46,16 +46,20 @@ namespace InMag_V._16
         {
             try
             {
-                string query = "select cus.*,ar.Area from tblCustomer cus, tblArea ar where cus.areaId=ar.areaId and cus.Customer like '%" + txtSearch.Text.Trim() + "%'  order by cus.areaId,cus.Customer";
+                string query = "select cus.*,ar.Area from tblCustomer cus, tblArea ar where cus.areaId=ar.areaId and cus.Customer like '" + txtSearch.Text.Trim() + "%'  order by cus.areaId,cus.Customer";
                 dataGridView1.DataSource = Connections.Instance.ShowDataInGridView(query);
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[2].Visible = false;
                 dataGridView1.Columns[3].Visible = false;
+                dataGridView1.Columns[4].Width = 50;
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
+                dataGridView1.Columns[7].Width = 40;
                 dataGridView1.Columns[8].Visible = false;
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
+                dataGridView1.Columns[11].Width = 80;
+
             }
             catch { }
         }
