@@ -71,10 +71,15 @@ namespace InMag_V._16
         {
             ds = new DataSet1();
             comboLoad();
-            cboRategroup.SelectedIndex = 0;
+            chkWholeSale.Checked = false;
             txtItemcode.Tag = null;
             SetBillNo();
             SearchGridLoad();
+            if (cboArea.Items.Count > 0)
+            {
+                cboArea.SelectedValue = 1;
+                //cboAreaSearch.Text = "General";
+            }
         }
         private void SetBillNo()
         {
@@ -137,6 +142,8 @@ namespace InMag_V._16
                 cboAreaSearch.ValueMember = "areaId";
                 cboAreaSearch.SelectedIndex = -1;
                 cboAreaSearch.Text = "";
+
+                
 
                 //query = "select itemId,Item_Name from tblItem order By Item_Name";
                 //cboItems.DataSource = Connections.Instance.ShowDataInGridView(query);
@@ -227,16 +234,17 @@ namespace InMag_V._16
             {
                 if (txtItemcode.Text.Trim() != "")
                 {
-                    string query = "select itemId,Rate from tblItem where item_Code='" + txtItemcode.Text.Trim() + "'";
-                    if (cboRategroup.Text == "Wholesale Price")
+                    string query = "select itemId,Rate,PRate from tblItem where item_Code='" + txtItemcode.Text.Trim() + "'";
+                    if (chkWholeSale.Checked)
                     {
-                        query = "select itemId,WRate from tblItem where item_Code='" + txtItemcode.Text.Trim() + "'";
+                        query = "select itemId,WRate,PRate from tblItem where item_Code='" + txtItemcode.Text.Trim() + "'";
                     }
                     DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
                     if (dt.Rows.Count > 0)
                     {
                         txtItems.Tag = dt.Rows[0][0].ToString();
                         txtRate.Text = dt.Rows[0][1].ToString();
+                        lblPRate.Text = dt.Rows[0][2].ToString();
                         txtQuantity.Focus();
                     }
                     dt.Dispose();
@@ -409,6 +417,7 @@ namespace InMag_V._16
             txtItems.Text = "";
             txtQuantity.Text = "0";
             txtRate.Text = "0";
+            lblPRate.Text = "0";
             txtItems.Focus();
         }
 
@@ -426,6 +435,7 @@ namespace InMag_V._16
                 {
                     txtItemcode.Enabled = false;
                     txtItems.Enabled = false;
+                    txtItems.Text = ItemGrid.Rows[rowno].Cells[3].Value.ToString();
                     txtItemcode.Text = ItemGrid.Rows[rowno].Cells[1].Value.ToString();
                     txtItems.Tag = ItemGrid.Rows[rowno].Cells[2].Value.ToString();
                     txtQuantity.Text  = ItemGrid.Rows[rowno].Cells[4].Value.ToString();
@@ -482,9 +492,9 @@ namespace InMag_V._16
                 for (int i = 0; i < ItemGrid.Rows.Count; i++)
                 {
                     string query = "";
-                    if (cboRategroup.Text == "Retail Price")
+                    if (!chkWholeSale.Checked)
                         query = "select rate from tblItem where itemId='" + ItemGrid.Rows[i].Cells[2].Value + "'";
-                    else if (cboRategroup.Text == "Wholesale Price")
+                    else if (chkWholeSale.Checked)
                         query = "select wrate from tblItem where itemId='" + ItemGrid.Rows[i].Cells[2].Value + "'";
                     DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
                     query = "update tblTemp set rate='" + Convert.ToDouble(dt.Rows[0][0].ToString()) + "',Total='" + Convert.ToDouble(dt.Rows[0][0].ToString()) * Convert.ToDouble(ItemGrid.Rows[i].Cells[4].Value) + "' where itemId='" + ItemGrid.Rows[i].Cells[2].Value + "'";
@@ -563,27 +573,29 @@ namespace InMag_V._16
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
-            if (cboArea.SelectedIndex == -1 || cboCustomer.SelectedIndex == -1 || txtBillno.Text == "")
-                MessageBox.Show("Please enter the data");
-            else
-            {
-                //if (ItemGrid.Rows.Count == 0)
+                 //if (ItemGrid.Rows.Count == 0)
                 //    MessageBox.Show("Please add items");
                 //else
                 //{
+
                     DialogResult dialogResult = MessageBox.Show("Do you want to save this bill?", "Sale Voucher", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
                         string query = "";
                         if (txtBillno.Tag == null)
                         {
-                            query = "insert into tblSales values('" + txtBillno.Text + "','" + DatePicker.Value.ToString("dd-MMM-yyyy") + "','" + cboArea.SelectedValue + "','" + cboCustomer.SelectedValue + "','" + Convert.ToDouble(txtCBalance.Text) + "','" + Convert.ToDouble(txtGrand.Text) + "','" + Convert.ToDouble(txtCash.Text) + "','" + Convert.ToDouble(txtDiscount.Text) + "','" + Convert.ToDouble(txtBalance.Text) + "','false')";
+                            string custId = ((cboCustomer.SelectedValue == null) ? 1 : cboCustomer.SelectedValue).ToString();
+
+                            query = "insert into tblSales values('" + txtBillno.Text + "','" + DatePicker.Value.ToString("dd-MMM-yyyy") + "','" + cboArea.SelectedValue + "','" + custId + "','" + Convert.ToDouble(txtCBalance.Text) + "','" + Convert.ToDouble(txtGrand.Text) + "','" + Convert.ToDouble(txtCash.Text) + "','" + Convert.ToDouble(txtDiscount.Text) + "','" + Convert.ToDouble(txtBalance.Text) + "','false')";
                             Connections.Instance.ExecuteQueries(query);
                             query = "select ident_current('tblSales')";
                             DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
                             int id = Convert.ToInt32(dt.Rows[0][0].ToString());
-                            query = "update tblCustomer set creditBal='" + Convert.ToDouble(txtBalance.Text) + "' where custId='" + cboCustomer.SelectedValue + "'";
-                            Connections.Instance.ExecuteQueries(query);
+                            if (custId != "1")
+                            {
+                                query = "update tblCustomer set creditBal='" + Convert.ToDouble(txtBalance.Text) + "' where custId='" + cboCustomer.SelectedValue + "'";
+                                Connections.Instance.ExecuteQueries(query);
+                            }
                             for (int i = 0; i < ItemGrid.Rows.Count; i++)
                             {
                                 query = "insert into tblSaleTrans values('" + id + "','" + ItemGrid.Rows[i].Cells[2].Value + "','" + ItemGrid.Rows[i].Cells[4].Value + "','" + ItemGrid.Rows[i].Cells[5].Value + "','" + ItemGrid.Rows[i].Cells[6].Value + "','false')";
@@ -593,11 +605,11 @@ namespace InMag_V._16
                             }
                             query = "update tblSettings set BillNo='" + id + "'";
                             Connections.Instance.ExecuteQueries(query);
-                            
+
                         }
                         else
-                        { 
-                        //update
+                        {
+                            //update
                             query = "select custId,Balance from tblSales where saleId='" + txtBillno.Tag.ToString() + "'";
                             DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
                             double newBal = Convert.ToDouble(dt.Rows[0][1].ToString()) - Convert.ToDouble(txtBalance.Text);//exbalance-balance
@@ -645,6 +657,8 @@ namespace InMag_V._16
                             System.Data.DataColumn PrevBalance = new System.Data.DataColumn("PrevBalance", typeof(System.Decimal));
                             PrevBalance.DefaultValue = txtCBalance.Text;
 
+                            
+
                             DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query1);
 
                             dt.Columns.Add(PrevBalance);
@@ -671,7 +685,7 @@ namespace InMag_V._16
                         
                         btnClear_Click(null, null);
                     //}
-                }
+                
             }
         }
         private void btnDelete_Click(object sender, EventArgs e)
@@ -721,6 +735,15 @@ namespace InMag_V._16
         {
 
         }
+        private void cboCustomer_TextChange(object sender, EventArgs e)
+        {
+            if (cboCustomer.Text == "")
+            {
+                txtCBalance.Text = "";
+                cboCustomer.SelectedIndex = -1;
+            }
+        }
+        
 
         private void cboAreaSearch_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -747,18 +770,20 @@ namespace InMag_V._16
         }
         private void txtItems_TextChanged(object sender, EventArgs e)
         {
+            string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem where Item_Name like '" + txtItems.Text + "%';";
+            ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
             if (txtItems.Text.Trim() != "")
             {
                 itemView.Visible = false;
-                string query = "select itemId,Item_Code,Item_Name,Rate,WRate from tblitem where Item_Name like '" + txtItems.Text + "%';";
-                ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
                 if (ItemDisplayGrid.Rows.Count == 1 && txtItems.Text != ItemDisplayGrid.Rows[0].Cells[2].Value.ToString())
                 {
 
                     txtItems.Tag = ItemDisplayGrid.Rows[0].Cells[0].Value.ToString();
                     txtItemcode.Text = ItemDisplayGrid.Rows[0].Cells[1].Value.ToString();
                     txtRate.Text = ItemDisplayGrid.Rows[0].Cells[3].Value.ToString();
-                    if (cboRategroup.Text == "Wholesale Price")
+                    lblPRate.Text = ItemDisplayGrid.Rows[0].Cells[5].Value.ToString();
+
+                    if (chkWholeSale.Checked == true)
                         txtRate.Text = ItemDisplayGrid.Rows[0].Cells[4].Value.ToString();
                     itemView.Visible = false;
                     txtQuantity.Focus();
@@ -775,6 +800,8 @@ namespace InMag_V._16
                     ItemDisplayGrid.Columns[1].Visible = false;
                     ItemDisplayGrid.Columns[3].Visible = false;
                     ItemDisplayGrid.Columns[4].Visible = false;
+                    ItemDisplayGrid.Columns[5].Visible = false;
+
                     ItemDisplayGrid.ClearSelection();
                 }
             }
@@ -782,9 +809,15 @@ namespace InMag_V._16
 
         private void txtItems_KeyDown(object sender, KeyEventArgs e)
         {
-
+           
             if (ItemDisplayGrid.Rows.Count > 1 && e.KeyCode == Keys.Down)
             {
+                if (txtItems.Text.Trim() == "")
+                {
+                    string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem order by Item_Name;";
+                    ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
+                }
+                itemView.Visible = true;
                 ItemDisplayGrid.Focus();
                 ItemDisplayGrid.Rows[0].Selected = true;
 
@@ -792,6 +825,27 @@ namespace InMag_V._16
             else if (e.KeyCode == Keys.Escape)
             {
                 itemView.Visible = false;
+            }
+            else if(e.KeyCode == Keys.Down)
+            {
+                itemView.Visible = true;
+
+                if (txtItems.Text.Trim() == "")
+                {
+                    itemView.Visible = false;
+                    string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem order by Item_Name;";
+                    ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
+                    itemView.Visible = true;
+                    ItemDisplayGrid.Columns[0].Visible = false;
+                    ItemDisplayGrid.Columns[1].Visible = false;
+                    ItemDisplayGrid.Columns[3].Visible = false;
+                    ItemDisplayGrid.Columns[4].Visible = false;
+                    ItemDisplayGrid.Columns[5].Visible = false;
+
+                    ItemDisplayGrid.ClearSelection();
+                    ItemDisplayGrid.Focus();
+                    ItemDisplayGrid.Rows[0].Selected = true;
+                }
             }
         }
         private void ItemDisplayGrid_KeyDown(object sender, KeyEventArgs e)
@@ -802,10 +856,13 @@ namespace InMag_V._16
                 txtItems.Tag = ItemDisplayGrid.Rows[r].Cells[0].Value.ToString();
                 txtItemcode.Text = ItemDisplayGrid.Rows[r].Cells[1].Value.ToString();
                 txtRate.Text = ItemDisplayGrid.Rows[r].Cells[3].Value.ToString();
-                if (cboRategroup.Text == "Wholesale Price")
+                if (chkWholeSale.Checked == true)
                     txtRate.Text = ItemDisplayGrid.Rows[r].Cells[4].Value.ToString();
                 txtQuantity.Focus();
+                lblPRate.Text = ItemDisplayGrid.Rows[r].Cells[5].Value.ToString();
                 txtItems.Text = ItemDisplayGrid.Rows[r].Cells[2].Value.ToString();
+                
+
                 itemView.Visible = false;
             }
             else if (e.KeyData == Keys.Escape)
@@ -822,12 +879,45 @@ namespace InMag_V._16
                 txtItems.Tag = ItemDisplayGrid.Rows[r].Cells[0].Value.ToString();
                 txtItemcode.Text = ItemDisplayGrid.Rows[r].Cells[1].Value.ToString();
                 txtRate.Text = ItemDisplayGrid.Rows[r].Cells[3].Value.ToString();
-                if (cboRategroup.Text == "Wholesale Price")
+                if (chkWholeSale.Checked)
                     txtRate.Text = ItemDisplayGrid.Rows[r].Cells[4].Value.ToString();
                 txtQuantity.Focus();
+                lblPRate.Text = ItemDisplayGrid.Rows[r].Cells[5].Value.ToString();
                 txtItems.Text = ItemDisplayGrid.Rows[r].Cells[2].Value.ToString();
+                if (ItemDisplayGrid.Rows.Count>0) 
+                    ItemDisplayGrid.Rows.Clear();
                 itemView.Visible = false;
             }
+        }
+
+        private void chkWholeSale_CheckedChanged(object sender, EventArgs e)
+        {
+
+            if (txtItems.Tag != "" && txtItems.Tag != null)
+            {
+                string query = "";
+                if (!chkWholeSale.Checked)
+                    query = "select rate from tblItem where itemId='" + txtItems.Tag + "'";
+                else if (chkWholeSale.Checked)
+                    query = "select wrate from tblItem where itemId='" + txtItems.Tag + "'";
+                DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
+                txtRate.Text = dt.Rows[0][0].ToString();
+            }
+        }
+
+        private void SearchGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
+
+        private void Edit_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void ItemDisplayGrid_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
         }
 
 
