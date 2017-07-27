@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using InMag_V._16.DataSet;
 using CrystalDecisions.CrystalReports.Engine;
 
+
 namespace InMag_V._16
 {
     public partial class frmStockView : Form
@@ -76,6 +77,30 @@ namespace InMag_V._16
         private void rbNegative_CheckedChanged(object sender, EventArgs e)
         {
             DataShow();
+        }
+
+        private void btnExport_Click(object sender, EventArgs e)
+        {
+            if (ItemGrid.Rows.Count > 0)
+            {
+                //Microsoft.Office.Interop.Excel.ApplicationClass XcelApp = new Microsoft.Office.Interop.Excel.ApplicationClass();
+                //XcelApp.Application.Workbooks.Add(Type.Missing);
+
+                //for (int i = 1; i < ItemGrid.Columns.Count + 1; i++)
+                //{
+                //    XcelApp.Cells[1, i] = ItemGrid.Columns[i - 1].HeaderText;
+                //}
+
+                //for (int i = 0; i < ItemGrid.Rows.Count; i++)
+                //{
+                //    for (int j = 0; j < ItemGrid.Columns.Count; j++)
+                //    {
+                //        XcelApp.Cells[i + 2, j + 1] = ItemGrid.Rows[i].Cells[j].Value.ToString();
+                //    }
+                //}
+                //XcelApp.Columns.AutoFit();
+                //XcelApp.Visible = true;
+            }
         }
     }
 }

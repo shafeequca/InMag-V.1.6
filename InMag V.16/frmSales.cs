@@ -54,17 +54,40 @@ namespace InMag_V._16
         }
         private void NumberOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
+            TextBox tb = sender as TextBox;
             if (!(e.KeyChar == 8 || e.KeyChar == 46 || e.KeyChar == 13 || (e.KeyChar >= 48 && e.KeyChar <= 57)))
                 e.Handled = true;
-            TextBox tb=sender as TextBox;
+            else
+            {
+                if (e.KeyChar == 46 && tb.Text.Contains("."))
+                {
+                    e.Handled = true;
+                }
+            }
             if (e.KeyChar == 13)
             {
                 if (tb.Name == "txtCash")
+                {
+                    txtDiscount.SelectionStart = 0;
+                    txtDiscount.SelectionLength = txtDiscount.Text.Length;
                     txtDiscount.Focus();
+                }
                 else if (tb.Name == "txtDiscount")
                     btnSave_Click(null, null);
                 else if (tb.Name == "txtItems")
+                {
+                    txtQuantity.SelectionStart = 0;
+                    txtQuantity.SelectionLength = txtQuantity.Text.Length;
                     txtQuantity.Focus();
+                }
+            }
+            else if (e.KeyChar == 27)
+            {
+                if (tb.Name == "txtDiscount")
+                {
+                    txtCash.SelectionStart = 0;
+                    txtCash.SelectionLength = txtCash.Text.Length;
+                }
             }
         }
         private void frmSales_Load(object sender, EventArgs e)
@@ -75,11 +98,14 @@ namespace InMag_V._16
             txtItemcode.Tag = null;
             SetBillNo();
             SearchGridLoad();
+            btnClear_Click(null, null);
             if (cboArea.Items.Count > 0)
             {
                 cboArea.SelectedValue = 1;
                 //cboAreaSearch.Text = "General";
             }
+            
+
         }
         private void SetBillNo()
         {
@@ -245,6 +271,8 @@ namespace InMag_V._16
                         txtItems.Tag = dt.Rows[0][0].ToString();
                         txtRate.Text = dt.Rows[0][1].ToString();
                         lblPRate.Text = dt.Rows[0][2].ToString();
+                        txtQuantity.SelectionStart = 0;
+                        txtQuantity.SelectionLength = txtQuantity.Text.Length;
                         txtQuantity.Focus();
                     }
                     dt.Dispose();
@@ -260,7 +288,15 @@ namespace InMag_V._16
                 txtQuantity.Text = "0";
             if (txtRate.Text.Trim() == "")
                 txtRate.Text = "0";
-            txtTotal.Text = (Convert.ToDouble(txtQuantity.Text) * Convert.ToDouble(txtRate.Text)).ToString();
+            try
+            {
+                txtTotal.Text = (Convert.ToDouble(txtQuantity.Text) * Convert.ToDouble(txtRate.Text)).ToString();
+            }
+
+            catch
+            {
+                txtTotal.Text = "0";
+            }
         }
 
         private void txtRate_TextChanged(object sender, EventArgs e)
@@ -269,12 +305,19 @@ namespace InMag_V._16
                 txtRate.Text = "0";
             if (txtQuantity.Text.Trim() == "")
                 txtQuantity.Text = "0";
-            txtTotal.Text = (Convert.ToDouble(txtQuantity.Text) * Convert.ToDouble(txtRate.Text)).ToString();
+            try
+            {
+                txtTotal.Text = (Convert.ToDouble(txtQuantity.Text) * Convert.ToDouble(txtRate.Text)).ToString();
+            }
+            catch
+            { }
         }
         private void txtQuantity_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
+                txtRate.SelectionStart = 0;
+                txtRate.SelectionLength = txtRate.Text.Length;
                 txtRate.Focus();
             }
         }
@@ -311,15 +354,37 @@ namespace InMag_V._16
             {
                 if (txtItems.Text.Trim() == "" || txtItems.Tag == null || txtQuantity.Text.Trim() == "" || txtQuantity.Text.Trim() == "0" || txtRate.Text.Trim() == "" || txtRate.Text.Trim() == "0")
                 {
-                    MessageBox.Show("Please enter the data");
-                    txtItems.Focus();
+                    if (txtItems.Text.Trim() == "" && txtItems.Tag == null && (txtQuantity.Text.Trim() == "" || txtQuantity.Text.Trim() == "0") && (txtRate.Text.Trim() == "" || txtRate.Text.Trim() == "0"))
+                    {
+                        txtCash.SelectionStart = 0;
+                        txtCash.SelectionLength = txtCash.Text.Length;
+                        txtCash.Focus();
+                    }
+                    else
+                    {
+                        MessageBox.Show("Please enter the details properly");
+                        txtItems.Focus();
+                    }
+
+                    
                 }
                 else
                 {
-                    string query = "select Current_Stock from tblItem where itemId='" + txtItems.Tag.ToString() + "'";
+                    string query = "select Current_Stock,minRate from tblItem where itemId='" + txtItems.Tag.ToString() + "'";
                     DataTable dt = (DataTable)Connections.Instance.ShowDataInGridView(query);
                     query = "select qty from tblTemp where itemId='" + txtItems.Tag.ToString() + "'";
                     DataTable dt1 = (DataTable)Connections.Instance.ShowDataInGridView(query);
+                    if (Convert.ToDouble(dt.Rows[0][1].ToString()) > Convert.ToDouble(txtRate.Text))
+                    {
+                        MessageBox.Show("Minimum rate level reached" + Environment.NewLine + "Please enter the rate >= " + dt.Rows[0][1].ToString());
+                        txtRate.Text = dt.Rows[0][1].ToString();
+                        txtRate.SelectionStart = 0;
+                        txtRate.SelectionLength = txtRate.Text.Length;
+                        txtRate.Focus();
+                        return;
+                    
+                    }
+                    
                     if (dt1.Rows.Count > 0)
                     {
                         if (txtBillno.Tag == null)
@@ -441,6 +506,8 @@ namespace InMag_V._16
                     txtQuantity.Text  = ItemGrid.Rows[rowno].Cells[4].Value.ToString();
                     txtRate.Text = ItemGrid.Rows[rowno].Cells[5].Value.ToString();
                     txtItemcode.Tag = ItemGrid.Rows[rowno].Cells[2].Value.ToString();
+                    txtQuantity.SelectionStart = 0;
+                    txtQuantity.SelectionLength = txtQuantity.Text.Length;
                     txtQuantity.Focus();
                 }
                 else if (item.Name == "Delete")
@@ -764,7 +831,8 @@ namespace InMag_V._16
             
             if (e.KeyChar == 13)
             {
-                
+                txtQuantity.SelectionStart = 0;
+                txtQuantity.SelectionLength = txtQuantity.Text.Length;
                     txtQuantity.Focus();
             }
         }
@@ -772,6 +840,8 @@ namespace InMag_V._16
         {
             string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem where Item_Name like '" + txtItems.Text + "%';";
             ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
+            ItemDisplayGrid.Columns[2].Width = 275;
+
             if (txtItems.Text.Trim() != "")
             {
                 itemView.Visible = false;
@@ -786,6 +856,8 @@ namespace InMag_V._16
                     if (chkWholeSale.Checked == true)
                         txtRate.Text = ItemDisplayGrid.Rows[0].Cells[4].Value.ToString();
                     itemView.Visible = false;
+                    txtQuantity.SelectionStart = 0;
+                    txtQuantity.SelectionLength = txtQuantity.Text.Length;
                     txtQuantity.Focus();
                     txtItems.Text = ItemDisplayGrid.Rows[0].Cells[2].Value.ToString();
                 }
@@ -796,11 +868,12 @@ namespace InMag_V._16
                 else
                 {
                     itemView.Visible = true;
+                    ItemDisplayGrid.ColumnHeadersVisible = true;
                     ItemDisplayGrid.Columns[0].Visible = false;
                     ItemDisplayGrid.Columns[1].Visible = false;
-                    ItemDisplayGrid.Columns[3].Visible = false;
-                    ItemDisplayGrid.Columns[4].Visible = false;
-                    ItemDisplayGrid.Columns[5].Visible = false;
+                    //ItemDisplayGrid.Columns[3].Visible = false;
+                    //ItemDisplayGrid.Columns[4].Visible = false;
+                    //ItemDisplayGrid.Columns[5].Visible = false;
 
                     ItemDisplayGrid.ClearSelection();
                 }
@@ -816,6 +889,7 @@ namespace InMag_V._16
                 {
                     string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem order by Item_Name;";
                     ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
+                    ItemDisplayGrid.Columns[2].Width = 275;
                 }
                 itemView.Visible = true;
                 ItemDisplayGrid.Focus();
@@ -835,12 +909,14 @@ namespace InMag_V._16
                     itemView.Visible = false;
                     string query = "select itemId,Item_Code,Item_Name,Rate,WRate,PRate from tblitem order by Item_Name;";
                     ItemDisplayGrid.DataSource = Connections.Instance.ShowDataInGridView(query);
+                    ItemDisplayGrid.Columns[2].Width = 275;
                     itemView.Visible = true;
+                    ItemDisplayGrid.ColumnHeadersVisible = true;
                     ItemDisplayGrid.Columns[0].Visible = false;
                     ItemDisplayGrid.Columns[1].Visible = false;
-                    ItemDisplayGrid.Columns[3].Visible = false;
-                    ItemDisplayGrid.Columns[4].Visible = false;
-                    ItemDisplayGrid.Columns[5].Visible = false;
+                    //ItemDisplayGrid.Columns[3].Visible = false;
+                    //ItemDisplayGrid.Columns[4].Visible = false;
+                    //ItemDisplayGrid.Columns[5].Visible = false;
 
                     ItemDisplayGrid.ClearSelection();
                     ItemDisplayGrid.Focus();
@@ -858,6 +934,8 @@ namespace InMag_V._16
                 txtRate.Text = ItemDisplayGrid.Rows[r].Cells[3].Value.ToString();
                 if (chkWholeSale.Checked == true)
                     txtRate.Text = ItemDisplayGrid.Rows[r].Cells[4].Value.ToString();
+                txtQuantity.SelectionStart = 0;
+                txtQuantity.SelectionLength = txtQuantity.Text.Length;
                 txtQuantity.Focus();
                 lblPRate.Text = ItemDisplayGrid.Rows[r].Cells[5].Value.ToString();
                 txtItems.Text = ItemDisplayGrid.Rows[r].Cells[2].Value.ToString();
@@ -881,6 +959,8 @@ namespace InMag_V._16
                 txtRate.Text = ItemDisplayGrid.Rows[r].Cells[3].Value.ToString();
                 if (chkWholeSale.Checked)
                     txtRate.Text = ItemDisplayGrid.Rows[r].Cells[4].Value.ToString();
+                txtQuantity.SelectionStart = 0;
+                txtQuantity.SelectionLength = txtQuantity.Text.Length;
                 txtQuantity.Focus();
                 lblPRate.Text = ItemDisplayGrid.Rows[r].Cells[5].Value.ToString();
                 txtItems.Text = ItemDisplayGrid.Rows[r].Cells[2].Value.ToString();
