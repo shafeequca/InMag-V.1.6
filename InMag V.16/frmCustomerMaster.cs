@@ -15,12 +15,15 @@ namespace InMag_V._16
         {
             InitializeComponent();
             this.txtCustomer.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCustomer_KeyDown);
-            this.txtTin.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTin_KeyDown);
-            this.txtCST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCst_KeyDown);
-            this.txtPlace.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPlace_KeyDown);
+            this.txtGSTIN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtTin_KeyDown);
+            this.txtAddress.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCst_KeyDown);
+            this.txtState.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtState_KeyDown);
             this.txtPhone.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtPhone_KeyDown);
             this.cboArea.KeyDown += new System.Windows.Forms.KeyEventHandler(this.cboArea_KeyDown);
             this.txtBalance.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtBalance_KeyDown);
+            this.txtStateCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtStateCode_KeyDown);
+            
+
             this.txtBalance.KeyPress += new KeyPressEventHandler(this.NumberOnly_KeyPress);
 
         }
@@ -51,7 +54,7 @@ namespace InMag_V._16
                 dataGridView1.Columns[0].Visible = false;
                 dataGridView1.Columns[2].Visible = false;
                 dataGridView1.Columns[3].Visible = false;
-                dataGridView1.Columns[4].Width = 50;
+                dataGridView1.Columns[4].Visible = false;
                 dataGridView1.Columns[5].Visible = false;
                 dataGridView1.Columns[6].Visible = false;
                 dataGridView1.Columns[7].Width = 40;
@@ -59,6 +62,10 @@ namespace InMag_V._16
                 dataGridView1.Columns[9].Visible = false;
                 dataGridView1.Columns[10].Visible = false;
                 dataGridView1.Columns[11].Width = 80;
+                dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Width = 80;
 
             }
             catch { }
@@ -69,13 +76,13 @@ namespace InMag_V._16
         {
             lblID.Text = "";
             txtBalance.Text = "";
-            txtCST.Text = "";
+            txtAddress.Text = "";
             txtCustomer.Text = "";
-            txtNotes.Text = "";
+            txtStateCode.Text = "";
             txtPhone.Text = "";
-            txtPlace.Text = "";
+            txtState.Text = "";
             txtSearch.Text = "";
-            txtTin.Text = "";
+            txtGSTIN.Text = "";
             cboArea.SelectedIndex = 0;
             txtCustomer.Focus();
         }
@@ -102,14 +109,23 @@ namespace InMag_V._16
             if (lblID.Text.Trim() == "")
             {
                 //Insert
-                if (txtCustomer.Text.Trim() == "" || txtPlace.Text == "" || txtBalance.Text == "")
+                if (txtCustomer.Text.Trim() == "" || txtState.Text == "" || txtBalance.Text == "")
                     MessageBox.Show("Please enter the data");
                 else
                 {
                     DialogResult dialogResult = MessageBox.Show("Do you want to save?", "Customer Master", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        string query = "insert into tblCustomer values('" + txtCustomer.Text.Trim() + "','" + txtTin.Text.Trim() + "','" + txtCST.Text.Trim() + "','" + txtPlace.Text.Trim() + "','" + txtPhone.Text.Trim() + "','" + cboArea.SelectedValue + "','" + Convert.ToDouble(txtBalance.Text) + "','" + txtNotes.Text.Trim() + "',0,'false')";
+                        string query = "insert into tblCustomer("+
+                                                    "Customer"+
+                                                    ",Phone"+
+                                                    ",areaId"+
+                                                    ",creditBal"+
+                                                    ",GSTIN"+
+                                                    ",Address"+
+                                                    ",State"+
+                                                    ",State_code)"+
+                                        "values('" + txtCustomer.Text.Trim() + "','" + txtPhone.Text.Trim() + "','" + cboArea.SelectedValue + "','" + Convert.ToDouble(txtBalance.Text) + "','" + txtGSTIN.Text.Trim() + "','" + txtAddress.Text.Trim() + "','" + txtState.Text.Trim() + "','" + txtStateCode.Text.Trim() + "')";
                         Connections.Instance.ExecuteQueries(query);
                         GridShow();
                         btnClear_Click(null, null);
@@ -126,7 +142,16 @@ namespace InMag_V._16
                     DialogResult dialogResult = MessageBox.Show("Do you want to save?", "Customer Master", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        string query = "update tblCustomer set Customer='" + txtCustomer.Text.Trim() + "',Tin='" + txtTin.Text.Trim() + "',CST='" + txtCST.Text.Trim() + "',Place='" + txtPlace.Text.Trim() + "',Phone='" + txtPhone.Text.Trim() + "',areaId='" + cboArea.SelectedValue + "',creditBal='" + Convert.ToDouble(txtBalance.Text) + "',Notes='" + txtNotes.Text.Trim() + "' where custId='" + lblID.Text.Trim() + "'";
+                        string query = "update  tblCustomer set "+
+                                               "Customer='" + txtCustomer.Text.Trim() + "'"+
+                                              ",Phone='" + txtPhone.Text.Trim() + "'"+
+                                              ",areaId='" + cboArea.SelectedValue + "'"+
+                                              ",creditBal='" + Convert.ToDouble(txtBalance.Text) + "'"+
+                                              ",GSTIN='" + txtGSTIN.Text.Trim() + "'"+
+                                              ",Address='" + txtAddress.Text.Trim() + "'"+
+                                              ",State='" + txtState.Text.Trim() + "'"+
+                                              ",State_code='" + txtStateCode.Text.Trim() + "'"+
+                                              " where custId='" + lblID.Text.Trim() + "'";
                         Connections.Instance.ExecuteQueries(query);
                         GridShow();
                         btnClear_Click(null, null);
@@ -141,13 +166,13 @@ namespace InMag_V._16
             {
                 lblID.Text = dataGridView1.Rows[e.RowIndex].Cells[0].Value.ToString();
                 txtCustomer.Text = dataGridView1.Rows[e.RowIndex].Cells[1].Value.ToString();
-                txtTin.Text = dataGridView1.Rows[e.RowIndex].Cells[2].Value.ToString();
-                txtCST.Text = dataGridView1.Rows[e.RowIndex].Cells[3].Value.ToString();
-                txtPlace.Text = dataGridView1.Rows[e.RowIndex].Cells[4].Value.ToString();
+                txtGSTIN.Text = dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString();
+                txtAddress.Text = dataGridView1.Rows[e.RowIndex].Cells[12].Value.ToString();
+                txtState.Text = dataGridView1.Rows[e.RowIndex].Cells[13].Value.ToString();
                 txtPhone.Text = dataGridView1.Rows[e.RowIndex].Cells[5].Value.ToString();
                 cboArea.SelectedValue = dataGridView1.Rows[e.RowIndex].Cells[6].Value.ToString(); 
                 txtBalance.Text = dataGridView1.Rows[e.RowIndex].Cells[7].Value.ToString();
-                txtNotes.Text = dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString();
+                txtStateCode.Text = dataGridView1.Rows[e.RowIndex].Cells[14].Value.ToString();
             }
         }
 
@@ -159,49 +184,56 @@ namespace InMag_V._16
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtTin.Focus();
+                txtGSTIN.Focus();
             }
         }
         private void txtTin_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtCST.Focus();
+                txtAddress.Focus();
             }
         }
         private void txtCst_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtPlace.Focus();
+                txtState.Focus();
             }
         }
-        private void txtPlace_KeyDown(object sender, KeyEventArgs e)
+        private void txtState_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtPhone.Focus();
+                txtStateCode.Focus();
             }
         }
-        private void txtPhone_KeyDown(object sender, KeyEventArgs e)
-        {
-            if (e.KeyData == Keys.Enter)
-            {
-                cboArea.Focus();
-            }
-        }
-        private void cboArea_KeyDown(object sender, KeyEventArgs e)
+        private void txtStateCode_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
                 txtBalance.Focus();
             }
         }
+        private void txtPhone_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtState.Focus();
+            }
+        }
+        private void cboArea_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                btnSave_Click(null, null);
+            }
+        }
         private void txtBalance_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtNotes.Focus();
+                cboArea.Focus();
             }
         }
         
@@ -271,6 +303,16 @@ namespace InMag_V._16
         }
 
         private void lblID_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtStateCode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtBalance_TextChanged(object sender, EventArgs e)
         {
 
         }

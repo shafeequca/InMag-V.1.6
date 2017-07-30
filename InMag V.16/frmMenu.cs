@@ -104,7 +104,7 @@ namespace InMag_V._16
                     return;
                 }
             }
-            frmSales frm = new frmSales();
+            frmSalesGST frm = new frmSalesGST();
             frm.Show(this);
         }
 
@@ -191,7 +191,7 @@ namespace InMag_V._16
                     return;
                 }
             }
-            frmSales frm = new frmSales();
+            frmSalesGST frm = new frmSalesGST();
             frm.Show(this);
         }
 

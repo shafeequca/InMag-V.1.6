@@ -1,6 +1,6 @@
 ﻿namespace InMag_V._16
 {
-    partial class frmSales
+    partial class frmSalesGST
     {
         /// <summary>
         /// Required designer variable.

@@ -11,10 +11,10 @@ using CrystalDecisions.CrystalReports.Engine;
 
 namespace InMag_V._16
 {
-    public partial class frmSales : Form
+    public partial class frmSalesGST : Form
     {
         DataSet1 ds;
-        public frmSales()
+        public frmSalesGST()
         {
             InitializeComponent();
             this.cboArea.SelectionChangeCommitted += new System.EventHandler(this.cboArea_SelectionChangeCommitted);

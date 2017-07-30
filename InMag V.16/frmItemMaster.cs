@@ -32,7 +32,31 @@ namespace InMag_V._16
             this.txtWholeSale.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly_KeyPress);
             this.txtMinRate.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.NumberOnly_KeyPress);
 
+
+            this.txtItemCode.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtItemCode_KeyDown);
+            this.txtHSN.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtHSN_KeyDown);
+            this.txtCGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtCGST_KeyDown);
+            this.txtSGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtSGST_KeyDown);
+            this.txtIGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtIGST_KeyDown);
+            this.txtISCGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtISCGST_KeyDown);
+            this.txtISSGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtISSGST_KeyDown);
+            this.txtISIGST.KeyDown += new System.Windows.Forms.KeyEventHandler(this.txtISIGST_KeyDown);
+
+
         }
+        public static InputLanguage GetInputLanguageByName(string inputName)
+        {
+            foreach (InputLanguage lang in InputLanguage.InstalledInputLanguages)
+            {
+                if (lang.Culture.EnglishName.ToLower().StartsWith(inputName))
+                    return lang;
+            }
+            return null;
+        }
+        public void SetKeyboardLayout(InputLanguage layout)
+        {
+            InputLanguage.CurrentInputLanguage = layout;
+        } 
         private void NumberOnly_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!(e.KeyChar == 8 || e.KeyChar == 46 || e.KeyChar == 13 || (e.KeyChar >= 48 && e.KeyChar <= 57)))
@@ -58,6 +82,13 @@ namespace InMag_V._16
                 txtMinRate.Text = dataGridView1.Rows[e.RowIndex].Cells[8].Value.ToString();
                 txtReorderLevel.Text = dataGridView1.Rows[e.RowIndex].Cells[9].Value.ToString();
                 txtStock.Text = dataGridView1.Rows[e.RowIndex].Cells[11].Value.ToString();
+                txtCGST.Text = dataGridView1.Rows[e.RowIndex].Cells[13].Value.ToString();
+                txtSGST.Text = dataGridView1.Rows[e.RowIndex].Cells[14].Value.ToString();
+                txtIGST.Text = dataGridView1.Rows[e.RowIndex].Cells[15].Value.ToString();
+                txtISCGST.Text = dataGridView1.Rows[e.RowIndex].Cells[16].Value.ToString();
+                txtISSGST.Text = dataGridView1.Rows[e.RowIndex].Cells[17].Value.ToString();
+                txtISIGST.Text = dataGridView1.Rows[e.RowIndex].Cells[18].Value.ToString();
+                txtHSN.Text = dataGridView1.Rows[e.RowIndex].Cells[19].Value.ToString();
                 txtStock.Enabled = false;
             }
         }
@@ -78,6 +109,14 @@ namespace InMag_V._16
                 dataGridView1.Columns[10].Visible = false;
                 dataGridView1.Columns[11].Visible = false;
                 dataGridView1.Columns[12].Visible = false;
+                dataGridView1.Columns[13].Visible = false;
+                dataGridView1.Columns[14].Visible = false;
+                dataGridView1.Columns[15].Visible = false;
+                dataGridView1.Columns[16].Visible = false;
+                dataGridView1.Columns[17].Visible = false;
+                dataGridView1.Columns[18].Visible = false;
+                dataGridView1.Columns[19].Visible = false;
+                dataGridView1.Columns[20].Visible = false;
             }
             catch { }
         }
@@ -96,7 +135,15 @@ namespace InMag_V._16
             txtRetailRate.Text = "";
             txtStock.Text = "";
             txtWholeSale.Text = "";
-            txtItem.Focus();
+            txtItemCode.Text = "";
+            txtHSN.Text = "";
+            txtCGST.Text = "";
+            txtSGST.Text = "";
+            txtIGST.Text = "";
+            txtISCGST.Text = "";
+            txtISCGST.Text = "";
+            txtISIGST.Text = "";
+            txtItemCode.Focus();
         }
 
         private void txtSearch_TextChanged(object sender, EventArgs e)
@@ -111,12 +158,38 @@ namespace InMag_V._16
                 //Insert
                 if (txtItem.Text.Trim() == "" || txtMinRate.Text == "" || txtRetailRate.Text == "" || txtPurchaseRate.Text == "" || txtReorderLevel.Text == "" || txtStock.Text == "" || txtWholeSale.Text == "")
                     MessageBox.Show("Please enter the data");
+                else if (txtCGST.Text.Trim() == "" || txtIGST.Text.Trim() == "" || txtSGST.Text.Trim() == "" || txtISCGST.Text.Trim() == "" || txtISIGST.Text.Trim() == "" || txtISSGST.Text.Trim() == "")
+                {
+                    MessageBox.Show("Please enter the tax details properly");
+                    txtCGST.Focus();
+                }
                 else
                 {
                     DialogResult dialogResult = MessageBox.Show("Do you want to save?", "Item Master", MessageBoxButtons.YesNo);
                     if (dialogResult == DialogResult.Yes)
                     {
-                        string query = "insert into tblItem values('" + txtItemCode.Text.Trim() + "','" + txtItem.Text.Trim() + "','" + txtMalayalam.Text.Trim() + "','" + Convert.ToDouble(txtMRP.Text.Trim()) + "','" + Convert.ToDouble(txtRetailRate.Text.Trim()) + "','" + Convert.ToDouble(txtWholeSale.Text.Trim()) + "','" + Convert.ToDouble(txtPurchaseRate.Text) + "','" + Convert.ToDouble(txtMinRate.Text) + "','" + Convert.ToDouble(txtReorderLevel.Text.Trim()) + "','" + Convert.ToDouble(txtStock.Text) + "','" + Convert.ToDouble(txtStock.Text) + "','false')";
+                        string query = "insert into tblItem " +
+                                                    " (Item_Code " +
+                                                    " ,Item_Name" +
+                                                    " ,inMalayalam" +
+                                                    " ,MRP" +
+                                                    " ,Rate" +
+                                                    " ,WRate" +
+                                                    " ,PRate" +
+                                                    " ,minRate" +
+                                                    " ,ReOrder" +
+                                                    " ,Opening_Stock" +
+                                                    " ,Current_Stock" +
+                                                    " ,Updated" +
+                                                    " ,CGSTPER" +
+                                                    " ,SGSTPER" +
+                                                    " ,IGSTPER" +
+                                                    " ,ISCGSTPER" +
+                                                    " ,ISSGSTPER" +
+                                                    " ,ISIGSTPER" +
+                                                    " ,HSN)" +
+                        "values('" + txtItemCode.Text.Trim() + "','" + txtItem.Text.Trim() + "','" + txtMalayalam.Text.Trim() + "','" + Convert.ToDouble(txtMRP.Text.Trim()) + "','" + Convert.ToDouble(txtRetailRate.Text.Trim()) + "','" + Convert.ToDouble(txtWholeSale.Text.Trim()) + "','" + Convert.ToDouble(txtPurchaseRate.Text) + "','" + Convert.ToDouble(txtMinRate.Text) + "','" + Convert.ToDouble(txtReorderLevel.Text.Trim()) + "','" + Convert.ToDouble(txtStock.Text) + "','" + Convert.ToDouble(txtStock.Text) + "','false'" +
+                        ",'" + Convert.ToDouble(txtCGST.Text.Trim()) + "','" + Convert.ToDouble(txtSGST.Text.Trim()) + "','" + Convert.ToDouble(txtIGST.Text.Trim()) + "','" + Convert.ToDouble(txtISCGST.Text.Trim()) + "','" + Convert.ToDouble(txtISSGST.Text.Trim()) + "','" + Convert.ToDouble(txtISIGST.Text.Trim()) + "','" + txtHSN.Text +"')";
                         Connections.Instance.ExecuteQueries(query);
                         GridShow();
                         btnClear_Click(null, null);
@@ -126,18 +199,26 @@ namespace InMag_V._16
             }
             else
             {
-                //Update
-                if (txtItem.Text.Trim() == "" || txtMinRate.Text == "" || txtRetailRate.Text == "" || txtPurchaseRate.Text == "" || txtReorderLevel.Text == "" || txtStock.Text == "" || txtWholeSale.Text == "")
-                    MessageBox.Show("Please enter the data");
+                if (txtCGST.Text.Trim() == "" || txtIGST.Text.Trim() == "" || txtSGST.Text.Trim() == "" || txtISCGST.Text.Trim() == "" || txtISIGST.Text.Trim() == "" || txtISSGST.Text.Trim() == "")
+                {
+                    MessageBox.Show("Please enter the tax details properly");
+                    txtCGST.Focus();
+                }
                 else
                 {
-                    DialogResult dialogResult = MessageBox.Show("Do you want to save?", "Customer Master", MessageBoxButtons.YesNo);
-                    if (dialogResult == DialogResult.Yes)
+                    //Update
+                    if (txtItem.Text.Trim() == "" || txtMinRate.Text == "" || txtRetailRate.Text == "" || txtPurchaseRate.Text == "" || txtReorderLevel.Text == "" || txtStock.Text == "" || txtWholeSale.Text == "")
+                        MessageBox.Show("Please enter the data");
+                    else
                     {
-                        string query = "update tblItem set Item_Name='" + txtItem.Text.Trim() + "',inMalayalam='" + txtMalayalam.Text.Trim() + "',MRP='" + Convert.ToDouble(txtMRP.Text.Trim()) + "',Rate='" + Convert.ToDouble(txtRetailRate.Text.Trim()) + "',WRate='" + Convert.ToDouble(txtWholeSale.Text.Trim()) + "',PRate='" + Convert.ToDouble(txtPurchaseRate.Text) + "',minRate='" + Convert.ToDouble(txtMinRate.Text) + "',ReOrder='" + Convert.ToDouble(txtReorderLevel.Text.Trim()) + "' where itemId='" + lblID.Text.Trim() + "'";
-                        Connections.Instance.ExecuteQueries(query);
-                        GridShow();
-                        btnClear_Click(null, null);
+                        DialogResult dialogResult = MessageBox.Show("Do you want to save?", "Customer Master", MessageBoxButtons.YesNo);
+                        if (dialogResult == DialogResult.Yes)
+                        {
+                            string query = "update tblItem set Item_Code='" + txtItemCode.Text.Trim() + "',Item_Name='" + txtItem.Text.Trim() + "',inMalayalam='" + txtMalayalam.Text.Trim() + "',MRP='" + Convert.ToDouble(txtMRP.Text.Trim()).ToString() + "',Rate='" + Convert.ToDouble(txtRetailRate.Text.Trim()).ToString() + "',WRate='" + Convert.ToDouble(txtWholeSale.Text.Trim()).ToString() + "',PRate='" + Convert.ToDouble(txtPurchaseRate.Text.Trim()).ToString() + "',minRate='" + Convert.ToDouble(txtMinRate.Text.Trim()).ToString() + "',ReOrder='" + Convert.ToDouble(txtReorderLevel.Text.Trim()).ToString() + "',CGSTPER='" + Convert.ToDouble(txtCGST.Text.Trim()).ToString() + "',SGSTPER='" + Convert.ToDouble(txtSGST.Text.Trim()).ToString() + "',IGSTPER='" + Convert.ToDouble(txtIGST.Text.Trim()).ToString() + "',ISCGSTPER='" + Convert.ToDouble(txtISCGST.Text.Trim()).ToString() + "',ISSGSTPER='" + Convert.ToDouble(txtISSGST.Text.Trim()).ToString() + "',ISIGSTPER='" + Convert.ToDouble(txtISIGST.Text.Trim()).ToString() + "',HSN='" + txtHSN.Text.Trim() + "' where itemId='" + lblID.Text.Trim() + "'";
+                            Connections.Instance.ExecuteQueries(query);
+                            GridShow();
+                            btnClear_Click(null, null);
+                        }
                     }
                 }
             }
@@ -219,20 +300,117 @@ namespace InMag_V._16
         {
             if (e.KeyData == Keys.Enter)
             {
-                txtStock.Focus();
+                if (txtStock.Enabled == true)
+                    txtCGST.Focus();
+                else
+                    txtStock.Focus();
             }
+
         }
         private void txtStock_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtCGST.Focus();
+            }
+        }
+        private void txtCGST_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtSGST.Focus();
+            }
+        }
+        private void txtSGST_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtIGST.Focus();
+            }
+        }
+        private void txtIGST_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtISCGST.Focus();
+            }
+        }
+        private void txtISCGST_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtISSGST.Focus();
+            }
+        }
+        private void txtISSGST_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtISIGST.Focus();
+            }
+        }
+        private void txtISIGST_KeyDown(object sender, KeyEventArgs e)
         {
             if (e.KeyData == Keys.Enter)
             {
                 btnSave_Click(null, null);
             }
         }
-
+        private void txtHSN_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtItem.Focus();
+            }
+        }
+        private void txtItemCode_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyData == Keys.Enter)
+            {
+                txtHSN.Focus();
+            }
+        }
         private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
         }
+
+        private void txtMalayalam_Enter(object sender, EventArgs e)
+        {
+            //System.Globalization.CultureInfo TypeOfLanguage = new System.Globalization.CultureInfo("mal");
+            //InputLanguage.CurrentInputLanguage = InputLanguage.FromCulture(TypeOfLanguage);
+            //SetKeyboardLayout(GetInputLanguageByName("mal"));
+        }
+
+        private void txtMalayalam_Leave(object sender, EventArgs e)
+        {
+            //SetKeyboardLayout(GetInputLanguageByName("eng"));
+        }
+
+        private void txtMalayalam_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtStock_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtReorderLevel_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtCGST_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void txtItemCode_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
+
 }
